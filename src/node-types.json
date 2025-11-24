@@ -2,7 +2,28 @@
   {
     "type": "link",
     "named": true,
-    "fields": {}
+    "fields": {
+      "destination": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "destination",
+            "named": true
+          }
+        ]
+      },
+      "text": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "label",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "source_file",
@@ -35,5 +56,13 @@
   {
     "type": "]",
     "named": false
+  },
+  {
+    "type": "destination",
+    "named": true
+  },
+  {
+    "type": "label",
+    "named": true
   }
 ]

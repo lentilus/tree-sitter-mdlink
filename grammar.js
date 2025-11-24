@@ -1,29 +1,25 @@
 module.exports = grammar({
   name: 'mdlink',
 
-  // Allow whitespace (including newlines) between tokens
-  extras: $ => [ /\s+/ ],
+  // allow whitespace/newlines as extras so blank lines don't produce ERRORs
+  extras: $ => [/\s+/],
 
   rules: {
-    // the entry point: a sequence of inline pieces (links or plain text)
     source_file: $ => repeat($._inline),
 
     _inline: $ => choice(
       $.link,
-      // any plain text that isn't brackets/parentheses or newline
-      /[^\[\]\(\)\n]+/
+      /[^\[\]\(\)\n]+/       // plain text
     ),
 
-    // A simple link: [label](destination)
-    // label: everything up to a closing ']' (excluding newlines)
-    // destination: everything up to a closing ')' (excluding newlines)
+    // link node with labeled child nodes
     link: $ => seq(
-      '[',
-      field('text', /[^\]\n]+/),
-      ']',
-      '(',
-      field('destination', /[^\)\n]+/),
-      ')'
+      '[', field('text', $.label), ']',   // capture label as a `label` node
+      '(', field('destination', $.destination), ')' // capture destination as `destination`
     ),
+
+    // make label/destination explicit node types (token rules)
+    label: $ => /[^\]\n]+/,
+    destination: $ => /[^\)\n]+/,
   }
 });

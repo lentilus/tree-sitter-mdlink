@@ -22,11 +22,11 @@
 enum ts_symbol_identifiers {
   aux_sym__inline_token1 = 1,
   anon_sym_LBRACK = 2,
-  aux_sym_link_token1 = 3,
-  anon_sym_RBRACK = 4,
-  anon_sym_LPAREN = 5,
-  aux_sym_link_token2 = 6,
-  anon_sym_RPAREN = 7,
+  anon_sym_RBRACK = 3,
+  anon_sym_LPAREN = 4,
+  anon_sym_RPAREN = 5,
+  sym_label = 6,
+  sym_destination = 7,
   sym_source_file = 8,
   sym__inline = 9,
   sym_link = 10,
@@ -37,11 +37,11 @@ static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
   [aux_sym__inline_token1] = "_inline_token1",
   [anon_sym_LBRACK] = "[",
-  [aux_sym_link_token1] = "link_token1",
   [anon_sym_RBRACK] = "]",
   [anon_sym_LPAREN] = "(",
-  [aux_sym_link_token2] = "link_token2",
   [anon_sym_RPAREN] = ")",
+  [sym_label] = "label",
+  [sym_destination] = "destination",
   [sym_source_file] = "source_file",
   [sym__inline] = "_inline",
   [sym_link] = "link",
@@ -52,11 +52,11 @@ static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
   [aux_sym__inline_token1] = aux_sym__inline_token1,
   [anon_sym_LBRACK] = anon_sym_LBRACK,
-  [aux_sym_link_token1] = aux_sym_link_token1,
   [anon_sym_RBRACK] = anon_sym_RBRACK,
   [anon_sym_LPAREN] = anon_sym_LPAREN,
-  [aux_sym_link_token2] = aux_sym_link_token2,
   [anon_sym_RPAREN] = anon_sym_RPAREN,
+  [sym_label] = sym_label,
+  [sym_destination] = sym_destination,
   [sym_source_file] = sym_source_file,
   [sym__inline] = sym__inline,
   [sym_link] = sym_link,
@@ -76,10 +76,6 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [aux_sym_link_token1] = {
-    .visible = false,
-    .named = false,
-  },
   [anon_sym_RBRACK] = {
     .visible = true,
     .named = false,
@@ -88,13 +84,17 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [aux_sym_link_token2] = {
-    .visible = false,
-    .named = false,
-  },
   [anon_sym_RPAREN] = {
     .visible = true,
     .named = false,
+  },
+  [sym_label] = {
+    .visible = true,
+    .named = true,
+  },
+  [sym_destination] = {
+    .visible = true,
+    .named = true,
   },
   [sym_source_file] = {
     .visible = true,
@@ -163,26 +163,26 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
   switch (state) {
     case 0:
       if (eof) ADVANCE(4);
-      if (lookahead == '(') ADVANCE(11);
-      if (lookahead == ')') ADVANCE(14);
+      if (lookahead == '(') ADVANCE(9);
+      if (lookahead == ')') ADVANCE(10);
       if (lookahead == '[') ADVANCE(7);
-      if (lookahead == ']') ADVANCE(10);
+      if (lookahead == ']') ADVANCE(8);
       if (('\t' <= lookahead && lookahead <= '\r') ||
           lookahead == ' ') SKIP(0);
       END_STATE();
     case 1:
       if (lookahead == '\n') SKIP(1);
       if (('\t' <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(8);
+          lookahead == ' ') ADVANCE(11);
       if (lookahead != 0 &&
-          lookahead != ']') ADVANCE(9);
+          lookahead != ']') ADVANCE(12);
       END_STATE();
     case 2:
       if (lookahead == '\n') SKIP(2);
       if (('\t' <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(12);
+          lookahead == ' ') ADVANCE(13);
       if (lookahead != 0 &&
-          lookahead != ')') ADVANCE(13);
+          lookahead != ')') ADVANCE(14);
       END_STATE();
     case 3:
       if (eof) ADVANCE(4);
@@ -223,43 +223,43 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(anon_sym_LBRACK);
       END_STATE();
     case 8:
-      ACCEPT_TOKEN(aux_sym_link_token1);
-      if (lookahead == '\t' ||
-          (0x0b <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(8);
-      if (lookahead != 0 &&
-          (lookahead < '\t' || '\r' < lookahead) &&
-          lookahead != ']') ADVANCE(9);
-      END_STATE();
-    case 9:
-      ACCEPT_TOKEN(aux_sym_link_token1);
-      if (lookahead != 0 &&
-          lookahead != '\n' &&
-          lookahead != ']') ADVANCE(9);
-      END_STATE();
-    case 10:
       ACCEPT_TOKEN(anon_sym_RBRACK);
       END_STATE();
-    case 11:
+    case 9:
       ACCEPT_TOKEN(anon_sym_LPAREN);
       END_STATE();
-    case 12:
-      ACCEPT_TOKEN(aux_sym_link_token2);
+    case 10:
+      ACCEPT_TOKEN(anon_sym_RPAREN);
+      END_STATE();
+    case 11:
+      ACCEPT_TOKEN(sym_label);
       if (lookahead == '\t' ||
           (0x0b <= lookahead && lookahead <= '\r') ||
-          lookahead == ' ') ADVANCE(12);
+          lookahead == ' ') ADVANCE(11);
       if (lookahead != 0 &&
           (lookahead < '\t' || '\r' < lookahead) &&
-          lookahead != ')') ADVANCE(13);
+          lookahead != ']') ADVANCE(12);
       END_STATE();
-    case 13:
-      ACCEPT_TOKEN(aux_sym_link_token2);
+    case 12:
+      ACCEPT_TOKEN(sym_label);
       if (lookahead != 0 &&
           lookahead != '\n' &&
-          lookahead != ')') ADVANCE(13);
+          lookahead != ']') ADVANCE(12);
+      END_STATE();
+    case 13:
+      ACCEPT_TOKEN(sym_destination);
+      if (lookahead == '\t' ||
+          (0x0b <= lookahead && lookahead <= '\r') ||
+          lookahead == ' ') ADVANCE(13);
+      if (lookahead != 0 &&
+          (lookahead < '\t' || '\r' < lookahead) &&
+          lookahead != ')') ADVANCE(14);
       END_STATE();
     case 14:
-      ACCEPT_TOKEN(anon_sym_RPAREN);
+      ACCEPT_TOKEN(sym_destination);
+      if (lookahead != 0 &&
+          lookahead != '\n' &&
+          lookahead != ')') ADVANCE(14);
       END_STATE();
     default:
       return false;
@@ -330,7 +330,7 @@ static const uint16_t ts_small_parse_table[] = {
       aux_sym__inline_token1,
   [38] = 1,
     ACTIONS(25), 1,
-      aux_sym_link_token1,
+      sym_label,
   [42] = 1,
     ACTIONS(27), 1,
       ts_builtin_sym_end,
@@ -342,7 +342,7 @@ static const uint16_t ts_small_parse_table[] = {
       anon_sym_LPAREN,
   [54] = 1,
     ACTIONS(33), 1,
-      aux_sym_link_token2,
+      sym_destination,
   [58] = 1,
     ACTIONS(35), 1,
       anon_sym_RPAREN,
