@@ -50,7 +50,7 @@
           "name": "destination",
           "content": {
             "type": "PATTERN",
-            "value": "[^)\\n]+"
+            "value": "[^\\)\\n]+"
           }
         },
         {
@@ -60,7 +60,12 @@
       ]
     }
   },
-  "extras": [],
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "\\s+"
+    }
+  ],
   "conflicts": [],
   "precedences": [],
   "externals": [],

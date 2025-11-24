@@ -1,12 +1,8 @@
-// tiny Tree-sitter grammar that recognizes Markdown links of the form
-//    [name](destination)
-// Fields produced: `text` (link label) and `destination` (link target)
-
 module.exports = grammar({
   name: 'mdlink',
 
-  // disable default extras (whitespace/comments) so matching is simple
-  extras: $ => [],
+  // Allow whitespace (including newlines) between tokens
+  extras: $ => [ /\s+/ ],
 
   rules: {
     // the entry point: a sequence of inline pieces (links or plain text)
@@ -26,7 +22,7 @@ module.exports = grammar({
       field('text', /[^\]\n]+/),
       ']',
       '(',
-      field('destination', /[^)\n]+/),
+      field('destination', /[^\)\n]+/),
       ')'
     ),
   }
