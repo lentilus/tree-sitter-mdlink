@@ -7,17 +7,15 @@
 
   outputs = { self, nixpkgs, ... }:
   let
-    system = builtins.currentSystem;
+    system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
   in
   {
-    devShells.default = pkgs.mkShell {
-      name = "tree-sitter-minimal-shell";
-
+    devShells."${system}".default = pkgs.mkShell {
       # only the minimal tools
       buildInputs = with pkgs; [
         tree-sitter
-        git
+        nodejs
       ];
 
       shellHook = ''
